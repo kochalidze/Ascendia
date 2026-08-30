@@ -1,0 +1,65 @@
+.like-post-btn {
+  --like-idle: #6b7280;       /* idle outline, muted gray */
+  --like-active: #ff5470;     /* filled heart, warm rose — განასხვავებს NEED_INTEL pink-ისგან */
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid #2a2e35;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--like-idle);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.like-post-btn:hover {
+  border-color: #3a3f47;
+  background: #15171b;
+  color: #cbd5e1;
+}
+
+.like-post-btn:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 2px;
+}
+
+.like-post-btn.is-liked {
+  border-color: rgba(255, 84, 112, 0.35);
+  color: var(--like-active);
+  background: rgba(255, 84, 112, 0.06);
+}
+
+.like-post-btn.is-pending {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.like-post-btn__icon {
+  flex-shrink: 0;
+  display: block;
+}
+
+.like-post-btn__count {
+  min-width: 1ch;
+  font-variant-numeric: tabular-nums;
+}
+
+.like-post-btn__icon.pop {
+  animation: like-pop 0.26s ease;
+}
+
+@keyframes like-pop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .like-post-btn__icon.pop {
+    animation: none;
+  }
+}

@@ -1,0 +1,173 @@
+.create-post-card {
+  background: rgba(2, 6, 23, 0.85); /* მუქი slate-950 მინის ეფექტით */
+  border: 1px solid rgba(6, 182, 212, 0.2); /* ნაზი ციანისფერი ჩარჩო */
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.05);
+  backdrop-filter: blur(8px);
+  margin-bottom: 24px;
+}
+
+/* ჰედერი */
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.terminal-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: #f43f5e; /* წითელი მოციმციმე წერტილი */
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.terminal-title {
+  color: #94a3b8;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.terminal-version {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+}
+
+/* კატეგორიის ღილაკები */
+.post-types-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.type-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.type-btn--cyan { color: #06b6d4; }
+.type-btn--emerald { color: #10b981; }
+.type-btn--rose { color: #f43f5e; }
+
+.type-btn.active {
+  box-shadow: 0 0 10px currentColor;
+  background: rgba(255, 255, 255, 0.05);
+}
+.type-btn--cyan.active { border-color: #06b6d4; }
+.type-btn--emerald.active { border-color: #10b981; }
+.type-btn--rose.active { border-color: #f43f5e; }
+
+/* ტექსტის არეალი */
+.textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.post-title-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px;
+  color: #f8fafc;
+  font-family: inherit;
+  font-weight: bold;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.post-title-input:focus {
+  border-color: #06b6d4;
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+}
+.post-textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 12px;
+  color: #f8fafc;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* დინამიკური ფოკუსი ტიპების მიხედვით */
+.post-textarea.focus-broadcast:focus { border-color: #06b6d4; box-shadow: 0 0 8px rgba(6, 182, 212, 0.3); }
+.post-textarea.focus-intel:focus { border-color: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.3); }
+.post-textarea.focus-challenge:focus { border-color: #f43f5e; box-shadow: 0 0 8px rgba(244, 63, 94, 0.3); }
+
+.char-counter {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ფუტერი და გადაცემის ღილაკი */
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.success-pulse {
+  color: #10b981;
+  font-size: 12px;
+  font-weight: bold;
+  animation: flash 1s infinite alternate;
+}
+
+.transmit-btn {
+  background: transparent;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.transmit-btn:disabled {
+  color: #475569 !important;
+  border: 1px solid #334155 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+
+.transmit-btn--broadcast { color: #06b6d4; border: 1px solid #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.2); }
+.transmit-btn--intel { color: #10b981; border: 1px solid #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+.transmit-btn--challenge { color: #f43f5e; border: 1px solid #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.2); }
+
+.transmit-btn:not(:disabled):hover {
+  background: currentColor;
+  color: #020617;
+}
+
+/* ანიმაციები */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes flash {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; text-shadow: 0 0 8px #10b981; }
+}

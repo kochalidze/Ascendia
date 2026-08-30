@@ -1,0 +1,83 @@
+.burger-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1000;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+.burger-line {
+  width: 24px;
+  height: 2px;
+  background: #e2e0f0;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* X ანიმაცია */
+.line-top-open {
+  transform: translateY(7px) rotate(45deg);
+}
+.line-mid-open {
+  opacity: 0;
+}
+.line-bot-open {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* მენიუ */
+.burger-menu {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 260px;
+  height: 100vh;
+  background: #0d0b1a;
+  border-left: 1px solid rgba(120, 80, 255, 0.25);
+  z-index: 999;
+  transition: right 0.3s ease;
+  padding: 80px 24px 24px;
+  box-sizing: border-box;  
+}
+
+.burger-menu-open {
+  right: 0;
+  
+}
+
+.burger-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.burger-links li {
+  padding: 14px 16px;
+  color: #e2e0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.burger-links li:hover {
+  background: rgba(120, 80, 255, 0.12);
+  color: #a07aff;
+}
+
+/* overlay */
+.burger-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}

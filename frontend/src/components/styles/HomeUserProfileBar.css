@@ -1,0 +1,47 @@
+.home-user-profile-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #1f0736;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.username {
+	color: #e0e0e0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-right: 10px;
+  font-style: italic;
+}
+
+
+.ud-xp-section {
+	width: 40%;
+  position: relative;
+  z-index: 1;
+  margin: 0 20px 20px;
+}
+.ud-xp-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(160, 122, 255, 0.6);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.ud-xp-track {
+  height: 6px;
+  background: rgba(120, 80, 255, 0.12);
+  border-radius: 3px;
+  border: 1px solid rgba(120, 80, 255, 0.2);
+  overflow: hidden;
+}
+
+.ud-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c50ff, #00e5ff);
+  border-radius: 3px;
+  transition: width 1s ease;
+}

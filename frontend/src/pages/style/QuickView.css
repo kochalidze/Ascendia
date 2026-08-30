@@ -1,0 +1,14 @@
+
+.dashboard-right {
+  min-height: 680px;
+}
+
+.right-widget h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #f6efff;
+}
+
+.right-tile {
+  min-height: 520px;
+}

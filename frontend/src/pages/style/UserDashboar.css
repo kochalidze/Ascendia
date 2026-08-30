@@ -1,0 +1,314 @@
+.ud-root {
+  min-height: 100vh;
+  background: #0d0b1a;
+  color: #e2e0f0;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  /* overflow-x: hidden; */
+  padding-bottom: 100px;
+  /* isolation: isolate; */
+}
+
+.ud-bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(120, 80, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 80, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ud-glow-top {
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(120, 80, 255, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ჰედერი */
+.ud-header {
+  position: relative;
+  z-index: 1;
+  height: 130px;
+  margin-bottom: 56px;
+}
+
+.ud-cover {
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(135deg, #1a1035 0%, #0f0825 50%, #1a1035 100%);
+  border-bottom: 1px solid rgba(120, 80, 255, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.ud-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(120, 80, 255, 0.06) 28px,
+    rgba(120, 80, 255, 0.06) 29px
+  );
+}
+
+.ud-avatar-wrap {
+  position: absolute;
+  bottom: -56px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88px;
+  height: 88px;
+}
+
+.ud-avatar-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, #7c50ff, #00e5ff) border-box;
+  /* -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); */
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: ud-ring-spin 4s linear infinite;
+}
+
+@keyframes ud-ring-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ud-avatar-img {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ud-avatar-initials {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #1a1035;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #a07aff;
+  letter-spacing: 2px;
+  z-index: 1000;
+}
+
+/* იდენტობა */
+.ud-identity {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 20px 24px;
+}
+
+.ud-username {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0eeff;
+  margin: 0 0 8px;
+  letter-spacing: 1px;
+}
+
+.ud-role-badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.ud-role-admin {
+  background: rgba(255, 200, 80, 0.12);
+  border: 1px solid rgba(255, 200, 80, 0.35);
+  color: #ffc850;
+}
+
+.ud-role-user {
+  background: rgba(120, 80, 255, 0.12);
+  border: 1px solid rgba(120, 80, 255, 0.35);
+  color: #a07aff;
+}
+
+.ud-email {
+  font-size: 13px;
+  color: rgba(160, 122, 255, 0.6);
+  margin: 0 0 10px;
+}
+
+.ud-bio {
+  font-size: 14px;
+  color: rgba(226, 224, 240, 0.6);
+  margin: 0;
+  font-family: sans-serif;
+  line-height: 1.5;
+}
+
+/* სტატისტიკა */
+.ud-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 0 20px 24px;
+  background: rgba(120, 80, 255, 0.07);
+  border: 1px solid rgba(120, 80, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px 0;
+}
+
+.ud-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ud-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(120, 80, 255, 0.2);
+}
+
+.ud-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #a07aff;
+}
+
+.ud-stat-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(160, 122, 255, 0.5);
+  text-transform: uppercase;
+}
+
+/* XP ბარი */
+.ud-xp-section {
+  position: relative;
+  z-index: 1;
+  margin: 0 20px 20px;
+}
+
+.ud-xp-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(160, 122, 255, 0.6);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.ud-xp-track {
+  height: 6px;
+  background: rgba(120, 80, 255, 0.12);
+  border-radius: 3px;
+  border: 1px solid rgba(120, 80, 255, 0.2);
+  overflow: hidden;
+}
+
+.ud-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c50ff, #00e5ff);
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+/* ინფო ბარათი */
+.ud-info-card {
+  position: relative;
+  z-index: 1;
+  margin: 0 20px 20px;
+  background: rgba(120, 80, 255, 0.05);
+  border: 1px solid rgba(120, 80, 255, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ud-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(120, 80, 255, 0.08);
+}
+
+.ud-info-row:last-child {
+  border-bottom: none;
+}
+
+.ud-info-label {
+  font-size: 12px;
+  color: rgba(160, 122, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.ud-info-value {
+  font-size: 13px;
+  color: #d0c8ff;
+}
+
+.ud-status-active {
+  color: #00e5a0;
+  letter-spacing: 1px;
+}
+
+/* Loading */
+.ud-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #0d0b1a;
+  color: rgba(160, 122, 255, 0.6);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.ud-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(120, 80, 255, 0.15);
+  border-top-color: #7c50ff;
+  border-radius: 50%;
+  animation: ud-spin 0.8s linear infinite;
+}
+
+@keyframes ud-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ud-divider {
+  position: relative;
+  top:10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  height: 2px;
+  width: calc(100% - 40px);
+  background: rgba(120, 80, 255, 0.15);
+  margin: 20px 0;
+}

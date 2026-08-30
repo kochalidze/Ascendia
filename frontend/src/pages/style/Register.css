@@ -1,0 +1,332 @@
+/* ===========================
+   Register.css — Digital City
+   =========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap');
+
+/* ---- CSS Variables ---- */
+:root {
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6, 182, 212, 0.15);
+  --cyan-glow: rgba(6, 182, 212, 0.2);
+  --cyan-border: rgba(6, 182, 212, 0.3);
+  --fuchsia: #d946ef;
+  --fuchsia-dim: rgba(217, 70, 239, 0.15);
+  --fuchsia-glow: rgba(217, 70, 239, 0.2);
+  --fuchsia-border: rgba(217, 70, 239, 0.3);
+  --red: #ef4444;
+  --bg-root: #020817;
+  --bg-card: rgba(15, 23, 42, 0.8);
+  --bg-input: #020817;
+  --slate-200: #e2e8f0;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+}
+
+/* ---- Root / Page ---- */
+.register-root {
+  min-height: 100vh;
+  background-color: var(--bg-root);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-root ::selection {
+  background: var(--cyan);
+  color: #000;
+}
+
+/* ---- Background Grid ---- */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, #1e293b 1px, transparent 1px),
+    linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, #000 70%, transparent 100%);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ---- Glow Orbs ---- */
+.glow {
+  position: absolute;
+  width: 24rem;
+  height: 24rem;
+  border-radius: 50%;
+  filter: blur(5rem);
+  animation: pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.glow-fuchsia {
+  top: 25%;
+  left: 25%;
+  background: rgba(217, 70, 239, 0.1);
+  animation-delay: 0s;
+}
+
+.glow-cyan {
+  bottom: 25%;
+  right: 25%;
+  background: rgba(6, 182, 212, 0.1);
+  animation-delay: 1s;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ---- Terminal Card ---- */
+.terminal-card {
+  width: 100%;
+  max-width: 32rem;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--cyan-border);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 0 30px var(--cyan-glow);
+  position: relative;
+  z-index: 10;
+}
+
+/* ---- Terminal Header ---- */
+.terminal-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  padding-bottom: 1rem;
+  text-align: center;
+  position: relative;
+}
+
+.sys-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.625rem;
+  color: rgba(6, 182, 212, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.terminal-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--cyan), var(--fuchsia), var(--cyan));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.5rem;
+  animation: text-shimmer 4s linear infinite;
+  filter: drop-shadow(0 0 10px var(--cyan-glow));
+}
+
+@keyframes text-shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.terminal-subtitle {
+  font-size: 0.7rem;
+  color: var(--slate-400);
+  margin: 0;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ---- Error Box ---- */
+.error-box {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(127, 29, 29, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: 0.25rem;
+  color: var(--red);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+}
+
+.error-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--red);
+  border-radius: 50%;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ping {
+  0% { transform: scale(1); opacity: 1; }
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+.error-label {
+  font-weight: bold;
+}
+
+/* ---- Form ---- */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ---- Field Group ---- */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ---- Labels ---- */
+.field-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.field-label--cyan {
+  color: var(--cyan);
+}
+
+.field-label--fuchsia {
+  color: var(--fuchsia);
+}
+
+.field-hint {
+  font-size: 0.625rem;
+  color: var(--slate-500);
+  font-weight: 400;
+}
+
+/* ---- Inputs ---- */
+.field-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--slate-800);
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  color: var(--slate-200);
+  font-size: 0.875rem;
+  font-family: 'Share Tech Mono', monospace;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.field-input--cyan:focus {
+  border-color: var(--cyan);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 15px var(--cyan-glow);
+}
+
+.field-input--fuchsia:focus {
+  border-color: var(--fuchsia);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 15px var(--fuchsia-glow);
+}
+
+.field-input::placeholder {
+  color: var(--slate-500);
+}
+
+.field-textarea {
+  resize: none;
+}
+
+/* ---- Submit Button ---- */
+.submit-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  background: linear-gradient(to right, var(--cyan), var(--fuchsia));
+  color: #000;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 20px var(--cyan-glow);
+  transform: scale(1);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: linear-gradient(to right, #22d3ee, #e879f9);
+  box-shadow: 0 4px 25px var(--fuchsia-glow);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Spinner ---- */
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #000;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Login Link Row ---- */
+.login-link-row {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--slate-500);
+  border-top: 1px solid rgba(30, 41, 59, 0.6);
+  padding-top: 1rem;
+}
+
+.login-link {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 700;
+  margin-left: 0.25rem;
+  transition: color 0.2s;
+}
+
+.login-link:hover {
+  color: #67e8f9;
+}
