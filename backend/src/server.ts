@@ -1,22 +1,15 @@
 import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
-
-dotenv.config();
-
-const sql = neon(process.env.DATABASE_URL!);
-const db = drizzle(sql);
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth.js";
 
 const app = express();
+const port = 8000;
 
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+app.all("/api/auth/{*any}", toNodeHandler(auth));
 
+// Mount body-parsing middleware after the Better Auth handler.
 app.use(express.json());
 
-export default app;
+app.listen(port, () => {
+    console.log(`Better Auth app listening on port ${port}`);
+});
