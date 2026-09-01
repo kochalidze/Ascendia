@@ -1,0 +1,153 @@
+/* Ascendia — Registration
+   Deep-space terminal aesthetic: dark violet-black field,
+   single cyan signal line, monospace data labels. */
+
+:root {
+  --asc-bg: #0a0a0f;
+  --asc-panel: #12121b;
+  --asc-border: #23232f;
+  --asc-text: #e7e7ef;
+  --asc-muted: #7a7a8c;
+  --asc-signal: #00e5ff;
+  --asc-signal-dim: rgba(0, 229, 255, 0.35);
+  --asc-danger: #ff4d6d;
+}
+
+form {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 40px 32px 32px;
+  background:
+    linear-gradient(180deg, rgba(0, 229, 255, 0.04), transparent 40%),
+    var(--asc-panel);
+  border: 1px solid var(--asc-border);
+  border-radius: 2px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--asc-text);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* thin signal line across the top edge, not a full glow-border */
+form::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--asc-signal), transparent);
+  opacity: 0.8;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--asc-muted);
+}
+
+.form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--asc-bg);
+  border: 1px solid var(--asc-border);
+  border-radius: 1px;
+  color: var(--asc-text);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.form-group input::placeholder {
+  color: #4a4a5a;
+}
+
+.form-group input:hover:not(:disabled) {
+  border-color: #34344a;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--asc-signal);
+  box-shadow: 0 0 0 3px var(--asc-signal-dim);
+}
+
+.form-group input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* keep native validation state from painting itself red before submit */
+.form-group input:invalid {
+  box-shadow: none;
+}
+
+button[type="submit"] {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 16px;
+  background: var(--asc-signal);
+  border: none;
+  border-radius: 1px;
+  color: #00171a;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 120ms ease, transform 80ms ease;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: #33ecff;
+}
+
+button[type="submit"]:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+button[type="submit"]:disabled {
+  background: #1c3a3f;
+  color: #4d6a6d;
+  cursor: not-allowed;
+}
+
+button[type="submit"]:focus-visible {
+  outline: 2px solid var(--asc-signal);
+  outline-offset: 2px;
+}
+
+.error-message {
+  margin: 16px 0 0;
+  padding: 10px 12px;
+  background: rgba(255, 77, 109, 0.08);
+  border-left: 2px solid var(--asc-danger);
+  color: var(--asc-danger);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-group input,
+  button[type="submit"] {
+    transition: none;
+  }
+}
+
+@media (max-width: 420px) {
+  form {
+    max-width: 100%;
+    padding: 32px 20px 24px;
+    border-radius: 0;
+  }
+}
