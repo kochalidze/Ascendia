@@ -1,14 +1,11 @@
+import "express";
 import { auth } from "./auth.ts";
-
-type AuthSession = typeof auth.$Infer.Session;
 
 declare global {
   namespace Express {
     interface Request {
-      user?: AuthSession["user"];
-      session?: AuthSession["session"];
+      user?: typeof auth.$Infer.Session.user;
+      session?: typeof auth.$Infer.Session.session;
     }
   }
 }
-
-export {};
