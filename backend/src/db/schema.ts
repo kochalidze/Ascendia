@@ -1,4 +1,4 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, varchar } from "drizzle-orm/pg-core";
 
 import { defineRelations } from "drizzle-orm";
 import {
@@ -111,4 +111,35 @@ export const authRelatoins = defineRelations({ users, sessions, accounts },
                 to: r.users.id,
             })
         }
-    }))
+    }));
+
+
+export const statusEnum = pgEnum("status", [
+    "single",
+    "in_a_relationship",
+    "engaged",
+    "married",
+    "in_a_civil_union",
+    "its_complicated",
+    "in_a_domestic_partnership",
+    "in_an_open_relationship",
+    "widowed",
+    "separated",
+    "divorced"
+]);
+
+export const genderEnum = pgEnum("gender", ["male", "female", "other"]);
+export const userProfiles = pgTable("user_profiles", {
+    id: text("id").primaryKey().references(() => users.id, { onDelete: "cascade" }),
+    username: text("username").notNull().unique().default(`sql'user' || floor(random() * (99999999 - 10000000 + 1) + 10000000)::text`),
+    bio: text("bio"),
+    pfp: text("pfp"),
+    background: text("background"),
+    status: statusEnum("status"),
+    occupation: text("occupation"),
+    education: text("education"),
+    note: text("note"),
+    lastNoteCreatedAt: timestamp("last_note_created_at"),
+    dateOfBirth: timestamp("date_of_birth"),
+    gender: genderEnum("gender"),
+})

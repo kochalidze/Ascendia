@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&family=Fredoka:wght@300..700&family=Permanent+Marker&family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 html, body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Comic Relief";
   background-color: #0f0b0b;
 }
 
 .app {
+  width: 100%;
+  height: 100%;
   text-align: center;
   color: #fff;
   min-height: 100vh;

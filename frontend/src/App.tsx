@@ -1,7 +1,7 @@
 import {useEffect} from "react";
+import {  Outlet } from "react-router";
 import { useAuthStore } from "./store/authStore";
 
-import Registration from "./pages/Registration.tsx";
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -9,9 +9,10 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, []);
+
   return (
     <div className="app">
-      <Registration />
+      <Outlet />
     </div>
   )
 }

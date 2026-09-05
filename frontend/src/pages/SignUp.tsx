@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router";
 
 import './styles/Registration.css'
 
-function Registration() {
+function SignUp() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [formError, setFormError] = useState<string>("");
 
   const { register, isLoading, error, clearError } = useAuthStore();
+
+  const navigate = useNavigate();
 
   function validate(): string | null {
     if (!name.trim()) return "სახელი სავალდებულოა";
@@ -33,6 +36,8 @@ function Registration() {
     try {
       await register(name.trim(), email.trim(), password);
       console.log("დარეგისტრირდა წარმატებით");
+      navigate("/signin");
+
     } catch (err) {
       console.error("რეგისტრაცია ვერ მოხერხდა:", err);
     }
@@ -95,4 +100,4 @@ function Registration() {
   );
 }
 
-export default Registration;
+export default SignUp;
