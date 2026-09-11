@@ -6,6 +6,9 @@ declare global {
     interface Request {
       user?: typeof auth.$Infer.Session.user;
       session?: typeof auth.$Infer.Session.session;
+      file?: Express.Multer.File;
     }
   }
 }
+
+export {}

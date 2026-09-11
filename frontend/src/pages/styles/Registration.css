@@ -1,153 +1,186 @@
-/* Ascendia — Registration
-   Deep-space terminal aesthetic: dark violet-black field,
-   single cyan signal line, monospace data labels. */
+/* ==========================================
+   iPHONE STYLE GRADIENT REGISTRATION FORM
+   ========================================== */
 
-:root {
-  --asc-bg: #0a0a0f;
-  --asc-panel: #12121b;
-  --asc-border: #23232f;
-  --asc-text: #e7e7ef;
-  --asc-muted: #7a7a8c;
-  --asc-signal: #00e5ff;
-  --asc-signal-dim: rgba(0, 229, 255, 0.35);
-  --asc-danger: #ff4d6d;
+/* მთლიანი გვერდის ფონი გრადიენტით */
+.registration-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at top left,
+    #3d2633 0%,
+    #1e1b2e 50%,
+    #2a1a24 100%
+  );
+  padding: 1.5rem;
+  box-sizing: border-box;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto,
+    sans-serif;
 }
 
-form {
+/* აიფონის ჩარჩოს სტილის ბარათი (Squircle / Ultra Rounded) */
+.iphone-card {
   position: relative;
   width: 100%;
-  max-width: 380px;
-  margin: 0 auto;
-  padding: 40px 32px 32px;
-  background:
-    linear-gradient(180deg, rgba(0, 229, 255, 0.04), transparent 40%),
-    var(--asc-panel);
-  border: 1px solid var(--asc-border);
-  border-radius: 2px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--asc-text);
-  isolation: isolate;
-  overflow: hidden;
+  max-width: 420px;
+  background: linear-gradient(
+    165deg,
+    rgba(61, 38, 51, 0.7) 0%,
+    rgba(42, 26, 36, 0.85) 100%
+  );
+  border-radius: 44px; /* აიფონის ეკრანის კუთხის რადიუსი */
+  padding: 2.5rem 2rem 2rem 2rem;
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(229, 131, 146, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(229, 131, 146, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
-/* thin signal line across the top edge, not a full glow-border */
-form::before {
-  content: "";
+/* Dynamic Island / Notch დეკორაცია */
+.notch-pill {
+  width: 100px;
+  height: 22px;
+  background-color: #1e1b2e;
+  border-radius: 20px;
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--asc-signal), transparent);
-  opacity: 0.8;
+  top: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+/* ჰედერი */
+.card-header {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.card-header h2 {
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: -0.5px;
+}
+
+.card-header p {
+  color: #e58392;
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ფორმის სტრუქტურა */
+.registration-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .form-group {
-  position: relative;
-  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--asc-muted);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-left: 0.5rem;
 }
 
-.form-group input {
+/* iOS ინპუტები */
+.ios-input {
   width: 100%;
-  box-sizing: border-box;
-  padding: 12px 14px;
-  background: var(--asc-bg);
-  border: 1px solid var(--asc-border);
-  border-radius: 1px;
-  color: var(--asc-text);
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.form-group input::placeholder {
-  color: #4a4a5a;
-}
-
-.form-group input:hover:not(:disabled) {
-  border-color: #34344a;
-}
-
-.form-group input:focus {
+  background: rgba(30, 27, 46, 0.6);
+  border: 1px solid rgba(229, 131, 146, 0.2);
+  border-radius: 18px; /* მომრგვალებული ინპუტები */
+  padding: 0.9rem 1.1rem;
+  font-size: 0.95rem;
+  color: #ffffff;
   outline: none;
-  border-color: var(--asc-signal);
-  box-shadow: 0 0 0 3px var(--asc-signal-dim);
+  box-sizing: border-box;
+  transition: all 0.25s ease-in-out;
 }
 
-.form-group input:disabled {
+.ios-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.ios-input:focus {
+  border-color: #e58392;
+  background: rgba(30, 27, 46, 0.85);
+  box-shadow: 0 0 12px rgba(229, 131, 146, 0.3);
+}
+
+.ios-input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* keep native validation state from painting itself red before submit */
-.form-group input:invalid {
-  box-shadow: none;
-}
-
-button[type="submit"] {
+/* iOS სტილის მთავარი ღილაკი */
+.ios-button {
+  margin-top: 0.75rem;
   width: 100%;
-  margin-top: 6px;
-  padding: 13px 16px;
-  background: var(--asc-signal);
+  background: linear-gradient(135deg, #e58392 0%, #c56877 100%);
+  color: #1e1b2e;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 1rem;
   border: none;
-  border-radius: 1px;
-  color: #00171a;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
+  border-radius: 22px; /* iOS Capsule / Bubble shape */
   cursor: pointer;
-  transition: background 120ms ease, transform 80ms ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(229, 131, 146, 0.3);
 }
 
-button[type="submit"]:hover:not(:disabled) {
-  background: #33ecff;
+.ios-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(229, 131, 146, 0.45);
+  filter: brightness(1.05);
 }
 
-button[type="submit"]:active:not(:disabled) {
-  transform: scale(0.99);
+.ios-button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
-button[type="submit"]:disabled {
-  background: #1c3a3f;
-  color: #4d6a6d;
+.ios-button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-button[type="submit"]:focus-visible {
-  outline: 2px solid var(--asc-signal);
-  outline-offset: 2px;
+/* შეცდომის შეტყობინების ბანერი */
+.error-banner {
+  background: rgba(229, 131, 146, 0.15);
+  border: 1px solid rgba(229, 131, 146, 0.4);
+  border-radius: 14px;
+  padding: 0.75rem;
+  text-align: center;
 }
 
 .error-message {
-  margin: 16px 0 0;
-  padding: 10px 12px;
-  background: rgba(255, 77, 109, 0.08);
-  border-left: 2px solid var(--asc-danger);
-  color: var(--asc-danger);
-  font-size: 13px;
-  line-height: 1.4;
+  color: #e58392;
+  font-size: 0.85rem;
+  margin: 0;
+  font-weight: 500;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .form-group input,
-  button[type="submit"] {
-    transition: none;
-  }
-}
-
-@media (max-width: 420px) {
-  form {
-    max-width: 100%;
-    padding: 32px 20px 24px;
-    border-radius: 0;
-  }
+/* ჩატვირთვის ტექსტი */
+.loader-text {
+  display: inline-block;
+  letter-spacing: 0.5px;
 }

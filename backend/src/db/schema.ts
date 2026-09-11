@@ -134,7 +134,7 @@ export const userProfiles = pgTable("user_profiles", {
     username: text("username").notNull().unique().default(`sql'user' || floor(random() * (99999999 - 10000000 + 1) + 10000000)::text`),
     bio: text("bio"),
     pfp: text("pfp"),
-    background: text("background"),
+    // background: text(""),
     status: statusEnum("status"),
     occupation: text("occupation"),
     education: text("education"),

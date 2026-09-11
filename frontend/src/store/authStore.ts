@@ -9,7 +9,7 @@ interface User {
   level: number;
   xp: number;
   coins: number;
-  avatar: string;
+  pfp: string;
   bio: string;
   created_at: string | null;
 };
@@ -37,7 +37,7 @@ const normalizeUser = (userData: any): User | null => {
     level: Number(userData.level ?? 0),
     xp: Number(userData.xp ?? 0),
     coins: Number(userData.coins ?? 0),
-    avatar: userData.avatar || userData.image || '',
+    pfp: userData.pfp || userData.avatar || userData.image || '',
     bio: userData.bio || '',
     created_at: userData.createdAt || null,
   };

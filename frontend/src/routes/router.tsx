@@ -5,6 +5,8 @@ import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
 import FirstPage from "../pages/FirstPage";
 
+import UserDashboard from "../pages/UserDashboard";
+
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -12,7 +14,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: '/',
-				loader: () => redirect('/firstpage')
+				loader: () => redirect('/signin')
 			},
 			{
 				path: "/signup",
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
 			{
 				path: "/firstpage",
 				Component: FirstPage ,
+			},
+			{
+				path: "/dashboard",
+				Component: UserDashboard ,
 			}
 		]
 	}

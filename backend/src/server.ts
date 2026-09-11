@@ -12,4 +12,7 @@ app.use(cors({
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
+import userRoutes from "./routes/users.route.ts";
+app.use("/api/auth", userRoutes);
+
 app.use(express.json());

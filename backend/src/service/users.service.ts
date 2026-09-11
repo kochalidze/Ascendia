@@ -3,6 +3,7 @@ import env from "../config/env.ts";
 import {S3} from "../config/S3.config.ts";
 import { db } from '../db/db.ts';
 import { userProfiles } from "../db/schema.ts"; //[cite: 3]
+import { users } from "../db/schema.ts";
 import { eq } from 'drizzle-orm';
 
 export const UserService = {
@@ -24,7 +25,7 @@ export const UserService = {
             Key: r2Key,
             Body: imageBuffer,
             ContentType: contentType
-        });
+        }); 
 
         await S3.send(command);
 
@@ -35,5 +36,39 @@ export const UserService = {
             .where(eq(userProfiles.id, userId)); //[cite: 3]
 
         return r2Key;
+    },
+
+    // Update user profile information (name, bio, background, )
+    updateProfile: async (userId: string,
+        data: {
+            name?: string;
+            bio?: string; 
+            occupation?: string;
+            education?: string;
+            status?: "single" | "in_a_relationship" | "engaged" | "married" | "its_complicated" | "divorced";
+            gender?: "male" | "female" | "other";
+            dateOfBirth?: Date;
+        }
+    ) => {
+        if (data.name) {
+            // თუ name არსებობს, ვანახლებთ users ცხრილს!
+            await db
+                .update(users)
+                .set({ name: data.name })
+                .where(eq(users.id, userId));
+        }
+        const { name, ...profileData } = data;
+
+        if (Object.keys(profileData).length > 0) {
+            const [updatedProfile] = await db
+                .update(userProfiles)
+                .set(profileData)
+                .where(eq(userProfiles.id, userId))
+                .returning();
+
+            return updatedProfile;
+        }
+
+        return { message: "Profile updated successfully" };
     }
-};
+}
