@@ -10,9 +10,9 @@ app.use(cors({
   credentials: true,         
 }));
 
-app.all("/api/auth/{*any}", toNodeHandler(auth));
+app.use(express.json());
 
 import userRoutes from "./routes/users.route.ts";
 app.use("/api/auth", userRoutes);
 
-app.use(express.json());
+app.all("/api/auth/{*any}", toNodeHandler(auth));

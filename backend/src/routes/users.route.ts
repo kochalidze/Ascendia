@@ -6,14 +6,19 @@ import { errorMiddleware } from "../middlewares/error.middleware.ts";
 const router = Router();
 
 router.put(
-	'/user/:userId/picture', 
-	errorMiddleware, authMiddleware, 
-	UsersControllers.uploadProfilePicture
-);
-router.put(
-	'/user/:userId/profile', 
+	'/me/profile', 
 	errorMiddleware, authMiddleware, 
 	UsersControllers.updateProfile
+);
+router.post(
+	'/me/avatar/presign',
+	errorMiddleware, authMiddleware, 
+	UsersControllers.getPresignedUrl('avatars')
+);
+router.post(
+	'/me/banner/presign',
+	errorMiddleware, authMiddleware, 
+	UsersControllers.getPresignedUrl('banners')
 );
 
 export default router;

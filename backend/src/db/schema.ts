@@ -1,5 +1,5 @@
 import { integer, pgEnum, pgTable, varchar } from "drizzle-orm/pg-core";
-
+import { sql } from 'drizzle-orm';
 import { defineRelations } from "drizzle-orm";
 import {
     text,
@@ -7,6 +7,7 @@ import {
     boolean,
     index,
     uniqueIndex,
+    primaryKey
 } from "drizzle-orm/pg-core";
 
 
@@ -142,4 +143,64 @@ export const userProfiles = pgTable("user_profiles", {
     lastNoteCreatedAt: timestamp("last_note_created_at"),
     dateOfBirth: timestamp("date_of_birth"),
     gender: genderEnum("gender"),
-})
+});
+
+export const postVisibilityEnum = pgEnum("post_visibility", ["public", "friends", "private"]);
+export const mediaTypeEnum = pgEnum("media_type", ["image", "video"]);
+
+export const posts = pgTable("posts", {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    authorId: text("author_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    caption: text("caption"),
+    visibility: postVisibilityEnum("visibility").notNull().default("public"),
+    commentsDisabled: boolean("comments_disabled").notNull().default(false),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),
+}, (t) => [
+    index("posts_author_created_idx").on(t.authorId, t.createdAt),
+    index("posts_created_idx").on(t.createdAt),
+]);
+
+// ერთ პოსტზე რამდენიმე ფოტო, მაგრამ მხოლოდ ერთი ვიდეო
+export const postMedia = pgTable("post_media", {
+    id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+    postId: text("post_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
+    type: mediaTypeEnum("type").notNull(),
+    url: text("url").notNull(),
+    position: integer("position").notNull().default(0),
+}, (t) => [
+    index("post_media_post_idx").on(t.postId, t.position),
+    // DB-ის დონეზე: ერთ პოსტზე მაქსიმუმ 1 ვიდეო
+    uniqueIndex("post_media_one_video_idx").on(t.postId).where(sql`${t.type} = 'video'`),
+]);
+
+// ლაიქები (რეაქციების გარეშე)
+export const postLikes = pgTable("post_likes", {
+    postId: text("post_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (t) => [
+    primaryKey({ columns: [t.postId, t.userId] }),
+    index("post_likes_user_idx").on(t.userId),
+]);
+
+// რეპოსტი (ცალკე ცხრილში, რომ posts-ში მედიის გარეშე ჩანაწერები არ გაჩნდეს)
+export const postReposts = pgTable("post_reposts", {
+    postId: text("post_id").notNull().references(() => posts.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (t) => [
+    primaryKey({ columns: [t.postId, t.userId] }),
+]);
+
+//? გვინდა თუ არა მოუდები (public,  private...)? +
+//? გვინდა თუ არა პოსტის დაედითება?
+//? როგორი ტიპის მედია გვინდა? (მინდა ფოტოს და ვიდეოს ატვირთვა მხოლოდ)
+//? გვინდა თუ არა ცალკე ტექსტის პოსტები? -
+//? გვინდა თუ არა რამოდენიმე მედიის  ატვირთვა რო შეგვეძლოს? -
+//? როგორ მივუდგეთ ბევრი/სხვადასხა მედიის  ატვირთვას? (შეგვეძლოს რამოდენიმე ფოტოს ატვირთვა ერთთად, მაგრამ შეგვეძლოს მხოლოდ ერთი ვიდეოს ატვირთვა)
+//? დავამატოთ თუ არა კომენტარის აკრძალვა? +
+//? რეკლამები?! -
+//? რეპოსტი თუ შეარი? (რეპოსტი, და ცალკე ღილაკით შეგვეძლოს მეგობარზე გაგზავნა)
+//? შეარი პოსტად უნდა ჩაითალოს თუ არა? (არა)
+//? ლაიქები იყოს თუ რეაქციები? (ლაიქები)

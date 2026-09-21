@@ -11,6 +11,7 @@ if (!process.env.BUCKET_NAME) throw new Error('BUCKET_NAME is not defined in .en
 if (!process.env.R2_ACCESS_KEY_ID) throw new Error('R2_ACCESS_KEY_ID is not defined in .env')
 if (!process.env.R2_SECRET_ACCESS_KEY) throw new Error('R2_SECRET_ACCESS_KEY is not defined in .env')
 if (!process.env.R2_ACCOUNT_ID) throw new Error('R2_ACCOUNT_ID is not defined in .env')
+if (!process.env.WORKER_URL) throw new Error('WORKER_URL is not defined in .env')
 
 const env = {
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
@@ -20,7 +21,8 @@ const env = {
     BUCKET_NAME: process.env.BUCKET_NAME,
     R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
     R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
-    R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID
+    R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
+    WORKER_URL: process.env.WORKER_URL || `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
 }
 
 export default env;
