@@ -1,83 +1,14 @@
-// import { useState } from "react";
-// import type { ChangeEvent } from "react";
-// import api from "../api/api";
-
-// const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-// const maxFileSize = 5 * 1024 * 1024; 
-
-// function UploadPicture() {
-//   const [previewUrl, setPreviewUrl] = useState("");
-//   const [isUploading, setIsUploading] = useState(false);
-//   const [error, setError] = useState("");
-
-//   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0];
-//     event.target.value = "";
-
-//     if (!file) return;
-
-//     setError("");
-
-//     if (!allowedTypes.includes(file.type)) {
-//       setError("აირჩიე JPG, PNG ან WEBP სურათი.");
-//       return;
-//     }
-
-//     if (file.size > maxFileSize) {
-//       setError("სურათის ზომა 5MB-ზე მეტი არ უნდა იყოს.");
-//       return;
-//     }
-
-//     setIsUploading(true);
-
-//     try {
-//       const { data } = await api.post("/me/avatar/presign", {
-//         contentType: file.type,
-//       });
-
-//       await api.put(data.presignUrl, file, {
-//         headers: { "Content-Type": file.type },
-//         baseURL: "",
-//         withCredentials: false,
-//       });
-
-//       await api.put("/users/me/profile", { pfp: data.publicUrl });
-//       setPreviewUrl(`${data.publicUrl}?t=${Date.now()}`);
-//     } catch (uploadError) {
-//       console.error(uploadError);
-//       setError("სურათის ატვირთვა ვერ მოხერხდა. სცადე თავიდან.");
-//     } finally {
-//       setIsUploading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <label htmlFor="profile-picture">პროფილის ფოტო</label>
-//       <input
-//         id="profile-picture"
-//         type="file"
-//         accept="image/jpeg,image/png,image/webp"
-//         onChange={handleFileChange}
-//         disabled={isUploading}
-//       />
-
-//       {isUploading && <p>იტვირთება...</p>}
-//       {error && <p role="alert">{error}</p>}
-//       {previewUrl && <img src={previewUrl} alt="პროფილის ფოტო" width={160} height={160} />}
-//     </div>
-//   );
-// }
-
-// export default UploadPicture
-
-
 import { useState } from 'react';
 import axios from 'axios';
 
 const API = 'http://localhost:6975/api/auth/me';
 
-export default function UploadTest() {
+type UploadPictureProps = {
+    uploadType?: 'avatar' | 'post';
+    onUploaded?: (url: string) => void;
+};
+
+export default function UploadPicture({ uploadType = 'avatar', onUploaded }: UploadPictureProps) {
     const [status, setStatus] = useState('');
     const [url, setUrl] = useState('');
 
@@ -88,7 +19,7 @@ export default function UploadTest() {
         try {
             setStatus('1/2: presigned URL-ის მოთხოვნა...');
             const { data } = await axios.post(
-                `${API}/avatar/presign`,
+                `${API}/${uploadType === 'avatar' ? 'avatar' : 'posts/media'}/presign`,
                 { contentType: file.type, size: file.size },
                 { withCredentials: true }
             );
@@ -100,6 +31,7 @@ export default function UploadTest() {
             });
 
             setUrl(data.publicUrl);
+            onUploaded?.(data.publicUrl);
             setStatus('ატვირთულია ✅');
         } catch (err: any) {
             console.error(err);

@@ -1,71 +1,102 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import env from "../config/env.ts";
-import {S3} from "../config/S3.config.ts";
-import { db } from '../db/db.ts';
-import { userProfiles } from "../db/schema.ts";
-import { users } from "../db/schema.ts";
-import { eq } from 'drizzle-orm';
+import { S3 } from "../config/S3.config.ts";
+import { db } from "../db/db.ts";
+import { userProfiles, users, posts, postMedia } from "../db/schema.ts";
+import { eq, inArray } from "drizzle-orm";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const getPresignedUrl = async (userId:string, contentType:string, folder:"avatars" | "banners") => {
-    if(!contentType.startsWith('image/')) throw new Error('Invalid file!');
-    const fileExtension = contentType.split('/')[1];
-    const r2Key = `public/${folder}/${folder === 'avatars' ? 'original' : ''}/${userId}.${fileExtension}`;
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_POST_MEDIA = 10;
+
+const buildPublicUrl = (r2Key: string) =>
+    `${process.env.WORKER_URL}/${process.env.BUCKET_NAME}/${r2Key}`;
+
+const getPresignedUrl = async (userId: string, contentType: string, folder: "avatars" | "posts") => {
+    if (!ALLOWED_IMAGE_TYPES.includes(contentType)) throw new Error("Invalid file!");
+    const fileExtension = contentType.split("/")[1];
+    const r2Key = folder === "avatars"
+        ? `public/avatars/original/${userId}.${fileExtension}`
+        : `public/posts/${userId}/${crypto.randomUUID()}.${fileExtension}`;
+
     const command = new PutObjectCommand({
         Bucket: process.env.BUCKET_NAME,
         Key: r2Key,
-        ContentType: contentType
+        ContentType: contentType,
     });
     const presignUrl = await getSignedUrl(S3, command, { expiresIn: 60 });
-    const publicUrl = `${process.env.WORKER_URL}/${process.env.BUCKET_NAME}/${r2Key}`;
-    return { presignUrl, publicUrl };
+    return { presignUrl, publicUrl: buildPublicUrl(r2Key), r2Key }; // r2Key დავამატე
+};
+
+//? Create a new post (text + media)
+const createPost = async (
+    authorId: string,
+    caption: string,
+    commentsDisabled: boolean,
+    visibility: "public" | "private",
+    mediaKeys: string[] = []
+) => {
+    if (!caption.trim() && mediaKeys.length === 0) throw new Error("Empty post");
+    if (mediaKeys.length > MAX_POST_MEDIA) throw new Error("Too many files");
+
+    const allowedPrefix = `public/posts/${authorId}/`;
+    if (!mediaKeys.every((k) => k.startsWith(allowedPrefix) && !k.includes(".."))) {
+        throw new Error("Invalid media key");
+    }
+
+    return await db.transaction(async (tx) => {
+        const [newPost] = await tx.insert(posts).values({
+            authorId,
+            caption,
+            visibility,
+            commentsDisabled,
+        }).returning();
+
+        if (!newPost) throw new Error("Failed to create post");
+
+        let media: { id: string; url: string; position: number }[] = [];
+        if (mediaKeys.length > 0) {
+            const mediaValues: {
+                postId: string;
+                type: "image" | "video";
+                url: string;
+                position: number;
+            }[] = mediaKeys.map((key, i) => ({
+                postId: newPost.id,
+                type: "image" as const,
+                url: buildPublicUrl(key),
+                position: i,
+            }));
+
+            media = await tx.insert(postMedia).values(mediaValues).returning();
+        }
+
+        return { ...newPost, media };
+    });
+};
+
+//? Get all posts for a specific user (with media)
+const getUserPosts = async (userId: string) => {
+    const userPosts = await db.select().from(posts).where(eq(posts.authorId, userId));
+    if (userPosts.length === 0) return [];
+
+    const media = await db
+        .select()
+        .from(postMedia)
+        .where(inArray(postMedia.postId, userPosts.map((p) => p.id)));
+
+    return userPosts.map((p) => ({
+        ...p,
+        media: media.filter((m) => m.postId === p.id).sort((a, b) => a.position - b.position),
+    }));
 };
 
 export const UserService = {
     getAvatarPresignedUrl: (userId: string, contentType: string) =>
-      getPresignedUrl(userId, contentType, "avatars"),
+        getPresignedUrl(userId, contentType, "avatars"),
 
-    getBannerPresignedUrl: (userId: string, contentType: string) =>
-      getPresignedUrl(userId, contentType, "banners"),
+    getPostMediaPresignedUrl: (userId: string, contentType: string) =>
+        getPresignedUrl(userId, contentType, "posts"),
 
-    saveAvatar: async (userId: string, publicUrl: string) => {
-      await db.update(userProfiles).set({ pfp: publicUrl }).where(eq(userProfiles.id, userId));
-    },
-
-    // saveBanner: async (userId: string, publicUrl: string) => {
-    //   await db.update(userProfiles).set({ background: publicUrl }).where(eq(userProfiles.id, userId));
-    // },
-
-    updateProfile: async (userId: string,
-        data: {
-            name?: string;
-            bio?: string; 
-            occupation?: string;
-            education?: string;
-            status?: "single" | "in_a_relationship" | "engaged" | "married" | "its_complicated" | "divorced";
-            gender?: "male" | "female" | "other";
-            dateOfBirth?: Date;
-        } 
-    ) => {
-        if (data.name) {
-            // თუ name არსებობს, ვანახლებთ users ცხრილს!
-            await db
-                .update(users)
-                .set({ name: data.name })
-                .where(eq(users.id, userId));
-        }
-        const { name, ...profileData } = data;
-
-        if (Object.keys(profileData).length > 0) {
-            const [updatedProfile] = await db
-                .update(userProfiles)
-                .set(profileData)
-                .where(eq(userProfiles.id, userId))
-                .returning();
-
-            return updatedProfile;
-        }
-
-        return { message: "Profile updated successfully" };
-    }
+    getUserPosts,
+    createPost,
 };
